@@ -13,6 +13,7 @@ module.exports = {
     addRole: (req, res)=>{
         try{
             console.log(req.body)
+            var data = req.body
             var sql = `INSERT INTO roles SET ?`
             conn.query(sql, data, (err, results)=>{
                 if(err) return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
