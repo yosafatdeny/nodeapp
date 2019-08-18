@@ -2,6 +2,7 @@ const express   = require('express')
 const cors      = require('cors')
 const bodyparser= require('body-parser')
 const moment    = require('moment')
+const Crypto    = require('crypto')
 
 //initial port
 const port = 2017
@@ -21,7 +22,9 @@ app.get('/',(req,res)=>{
     `)
 })
 
-// const { } = require('./routers')
+const { usersRouter } = require('./routers')
+
+app.use('/user', usersRouter)
 
 app.listen(port, ()=> console.log(`Api aktif diport ${port}`))
 
