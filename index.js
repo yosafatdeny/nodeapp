@@ -22,9 +22,10 @@ app.get('/',(req,res)=>{
     `)
 })
 
-const { usersRouter } = require('./routers')
+const { usersRouter, rolesRouter } = require('./routers')
 
 app.use('/user', usersRouter)
+app.use('/role', rolesRouter)
 
 app.listen(port, ()=> console.log(`Api aktif diport ${port}`))
 
