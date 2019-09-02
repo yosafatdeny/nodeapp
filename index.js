@@ -3,6 +3,7 @@ const cors      = require('cors')
 const bodyparser= require('body-parser')
 const moment    = require('moment')
 const Crypto    = require('crypto')
+const bearerToken  = require('express-bearer-token')
 
 //initial port
 const port = 2017
@@ -10,6 +11,7 @@ const port = 2017
 const app = express()
 //allow react access
 app.use(cors())
+app.use(bearerToken())
 //get json from req.body
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))

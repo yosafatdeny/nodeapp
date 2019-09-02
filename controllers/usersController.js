@@ -1,6 +1,7 @@
 const conn = require('../database')
 const Crypto = require('crypto')
 const transporter = require('../helpers/mailer')
+const { createJWTToken } = require('../helpers/jwt')
 
 module.exports={
     register: (req, res)=>{
@@ -18,17 +19,9 @@ module.exports={
                 var dataUser = {
                     username,
                     password: hashPasswor,
-                    firstName,
-                    lastName,
-                    gender,
                     email,
-                    phone,
-                    address,
-                    roleId,
                     active: 'Unverified',
-                    createDate: new Date(),
-                    lastUpdate: new Date(),
-                    lastlogin: new Date()
+                    createDate: new Date()
                 }
             }
 
@@ -64,6 +57,41 @@ module.exports={
             if(err) return res.status(500).send({message: 'Error', error: err})
             console.log(result)
             return res.status(200).send(result)
+        })
+    },
+    login: (req,res) => {
+        var { email, password } = req.body;
+        console.log(email, password)
+        var hashPassword = Crypto.createHmac("sha256", "puripuriprisoner")
+                                .update(password).digest("hex");
+        var sql = `Select * from users where email='${email}' and passowrd='${password}'`;
+        conn.query(sql, (err,results) => {
+            if(err) return res.status(500).send({ status: 'error', err })
+
+            if(results.length === 0) {
+                return res.status(200).send({ status: 'error', message: 'Username or Password Incorrect!'})
+            }
+            const token = createJWTToken({ userId: results[0].id, username: results[0].username })
+            console.log(token)
+            console.log(results)
+            return res.status(200).send({ username: results[0].username, email: results[0].email, status: results[0].status, token})
+            // return res.status(200).send({ username:results[0].username, email: results[0].email, status: results[0].status})
+        })
+    },
+    keepLogin: (req,res) => {
+        console.log('log-req ====>', req)
+        console.log('log-req.user ======>', req.user)
+        var sql = `Select * from users where id=${req.user.userId}`
+        conn.query(sql,(err,results) => {
+            if(err) return res.status(500).send({ status: 'error', err })
+
+            if(results.length === 0) {
+                return res.status(500).send({ status: 'error', err: 'User Not Found!'})
+            }
+
+            const token = createJWTToken({ userId: results[0].id, username: results[0].username })
+
+            res.send({ username: results[0].username, email: results[0].email, status: results[0].status, token})
         })
     }
 }
