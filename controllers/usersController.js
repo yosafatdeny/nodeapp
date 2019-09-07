@@ -17,6 +17,7 @@ module.exports={
             }else{
                 var hashPasswor = Crypto.createHmac("sha256", "marmutIjo")
                                         .update(password).digest("hex")
+                // var imagePath = `\sasa\sasas\sasas\sasa.png` '\users\images\user.png'
                 
                 var dataUser = {
                     username,
@@ -24,7 +25,8 @@ module.exports={
                     email,
                     active: 0,
                     roleId: 3,
-                    createDate: new Date()
+                    createDate: new Date(),
+                    image: "/user/images/user.png"
                 }
             }
 
@@ -56,20 +58,20 @@ module.exports={
     },
     emailVerifikasi: (req,res) => {
         var { username, password } = req.body;
-        console.log(req.body)
+        // console.log(req.body)
         var sql = `Select username,email from users where username='${username}'`;
         conn.query(sql, (err,results) => {
             if(err) return res.status(500).send({ status: 'error', err })
-            console.log('1')
+            // console.log('1')
             if(results.length === 0) {
                 return res.status(500).send({ status: 'error', err: 'User Not Found!'})
             }
-            console.log('2')
+            // console.log('2')
 
             sql = `Update users set active=1 where username='${username}' and password='${password}'`
             conn.query(sql, (err,results1) => {
                 if(err) return res.status(500).send({ status: 'error', err })
-                console.log('3')
+                // console.log('3')
                 res.status(200).send({ username: results[0].username, email: results[0].email, status: 'Verified' })
             })
         })
@@ -109,36 +111,63 @@ module.exports={
         var sql = `select * from users`
         conn.query(sql, (err, result)=>{
             if(err) return res.status(500).send({message: 'Error', error: err})
-            console.log(result)
+            // console.log(result)
             return res.status(200).send(result)
         })
     },
     getCurrentUser:(req, res) => {
         const {username} = req.params
-        console.log('get params ===>', username)
+        // console.log('get params ===>', username)
         var sql = `select * from users where username = '${username}'`
         conn.query(sql, (err, results) => {
             if(err) return res.status(500).send({message: 'error', error: err})
             
-            console.log('hasil get user ====>', results)
+            // console.log('hasil get user ====>', results)
             return res.status(200).send(results)
         })
     },
+    changePassword:(req, res) =>{
+        var {username, oldPassword, newPassword, confirm}  = req.body
+        console.log(req.body)
+        var sql = `select * from users where username = '${username}'`
+        conn.query(sql, (err, result)=>{
+            if(err) return res.status(500).json({ message: 'user not found', error: err.message });
+
+            var hashPassword = Crypto.createHmac("sha256", "marmutIjo")
+                                        .update(oldPassword).digest("hex")
+            
+            if(result[0].password !== hashPassword){
+                console.log('password salah')
+                return res.status(200).send({status: 'error', message: 'Old password Incorrect'})
+            }
+            console.log(result)
+            var hashPassword = Crypto.createHmac("sha256", "marmutIjo")
+                                        .update(newPassword).digest("hex")
+            const data = { password : hashPassword}
+            sql = `update users set ? where username = '${username}'`
+            conn.query(sql, data, (err1, result1)=>{
+                if(err) res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+
+                return res.status(200).send(result1)
+            })
+        })
+    },
     editUser:(req, res) => {
-        var {username} = req.params.username;
+        var {username} = req.params;
+        console.log('edit user ======> ', username)
         var sql = `select * from users where username = '${username}'`
         conn.query(sql, (err, results) => {
             if(err) throw err;
-
+            console.log('masuk disini - 1')
             if(results.length > 0){
                 const path = '/user/images';
-                const upload = uploader(path, 'POS').fields([{ name: 'image'}])
-
+                const upload = uploader(path, 'USR').fields([{ name: 'image'}])
+                console.log('masuk disini - 2')
                 upload(req, res, (err) => {
                     if(err){
                         return res.status(500).json({ message: 'Upload image user failed !', error: err.message });
                     }
-    
+                    console.log('masuk disini - 3')
                     const { image } = req.files;
                     // console.log(image)
                     const imagePath = image ? path + '/' + image[0].filename : null;
@@ -149,23 +178,25 @@ module.exports={
                             data.image = imagePath;
                             
                         }
-                        sql = `Update users set ? where username = ${username};`
+                        sql = `Update users set ? where username = '${username}';`
                         conn.query(sql,data, (err1,results1) => {
                             if(err1) {
                                 if(imagePath) {
                                     fs.unlinkSync('./public' + imagePath);
                                 }
+                                console.log('masuk disini - 4')
                                 return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
                             }
                             if(imagePath) {
                                 fs.unlinkSync('./public' + results[0].image);
                             }
-                            sql = `Select * from users where username=${req.user.username};`;
+                            console.log('req user ====> ', req.user)
+                            sql = `Select * from users where username='${req.user.username}'`;
                             conn.query(sql, (err2,results2) => {
                                 if(err2) {
-                                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err2.message });
                                 }
-
+                                console.log('masuk disini - 5')
                                 return res.status(200).send(results2);
                             })
                         })
@@ -180,7 +211,7 @@ module.exports={
     },
     login: (req,res) => {
         var { email, password } = req.body;
-        console.log(email, password)
+        // console.log(email, password)
         var hashPassword = Crypto.createHmac("sha256", "marmutIjo")
                                 .update(password).digest("hex");
         var sql = `Select * from users where email='${email}' and password='${hashPassword}'`;
@@ -191,15 +222,15 @@ module.exports={
                 return res.status(200).send({ status: 'error', message: 'Username or Password Incorrect!'})
             }
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
-            console.log(token)
-            console.log(results)
-            return res.status(200).send({ username: results[0].username, email: results[0].email, status: results[0].status, token})
+            // console.log(token)
+            // console.log('ini ========> ', results[0].active)
+            return res.status(200).send({ username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
             // return res.status(200).send({ username:results[0].username, email: results[0].email, status: results[0].status})
         })
     },
-    keepLogin: (req,res) => {
+    keepLogin: (req,res) => { 
         // console.log('log-req ====>', req)
-        console.log('log-req.user ======>', req.user)
+        // console.log('log-req.user ======>', req.user)
         var sql = `Select * from users where id=${req.user.userId}`
         conn.query(sql,(err,results) => {
             if(err) return res.status(500).send({ status: 'error', err })
@@ -210,7 +241,7 @@ module.exports={
 
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
 
-            res.send({ username: results[0].username, email: results[0].email, status: results[0].status, token})
+            res.send({ username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
         })
     }
 }
