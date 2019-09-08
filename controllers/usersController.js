@@ -26,7 +26,7 @@ module.exports={
                     active: 0,
                     roleId: 3,
                     createDate: new Date(),
-                    image: "/user/images/user.png"
+                    image: "/user/user.png"
                 }
             }
 
@@ -171,6 +171,7 @@ module.exports={
                     const { image } = req.files;
                     // console.log(image)
                     const imagePath = image ? path + '/' + image[0].filename : null;
+                    console.log(imagePath)
                     const data = JSON.parse(req.body.data);
     
                     try {
@@ -181,14 +182,16 @@ module.exports={
                         sql = `Update users set ? where username = '${username}';`
                         conn.query(sql,data, (err1,results1) => {
                             if(err1) {
-                                if(imagePath) {
+                                if(fs.existsSync(imagePath)) {
                                     fs.unlinkSync('./public' + imagePath);
                                 }
                                 console.log('masuk disini - 4')
                                 return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
                             }
                             if(imagePath) {
-                                fs.unlinkSync('./public' + results[0].image);
+                                if(results[0].image !== '/user/user.png'){
+                                    fs.unlinkSync('./public' + results[0].image);
+                                }
                             }
                             console.log('req user ====> ', req.user)
                             sql = `Select * from users where username='${req.user.username}'`;
