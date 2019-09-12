@@ -5,10 +5,16 @@ const fs = require('fs')
 
 module.exports ={
     getKelas: (req, res) => {
+        var qry = ''
+        if(req.query.idKelas){
+            qry = `where idKelas = ${req.query.idKelas}`
+        }
         var sql = `select k.*, c.name as category 
                         from kelas k 
                         join category c 
-                        On c.idCategory = k.catId`
+                        On c.idCategory = k.catId
+                        ${qry};`
+                               
         conn.query(sql, (err, result) => {
             if(err) return res.status(500).send({message: 'error', error: err})
 
