@@ -1,9 +1,13 @@
 const userController = require('./usersController')
 const rolesController = require('./rolesController')
 const kelasController = require('./kelasController')
+const cartController = require('./cartController')
+const paketController = require('./paketController')
 
 module.exports = {
     userController,
     rolesController,
-    kelasController
+    kelasController,
+    cartController,
+    paketController
 }
