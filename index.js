@@ -24,17 +24,20 @@ app.get('/',(req,res)=>{
     `)
 })
 
-const { usersRouter, rolesRouter, kelasRouter, cartRouter, paketRouter} = require('./routers')
+const { usersRouter, rolesRouter, kelasRouter, cartRouter, paketRouter, transactionRouter} = require('./routers')
 
 app.use('/user', usersRouter)
 app.use('/role', rolesRouter)
 app.use('/kelas', kelasRouter)
 app.use('/cart', cartRouter)
 app.use('/paket', paketRouter)
+app.use('/transaction', transactionRouter)
 
 
 
 app.listen(port, ()=> console.log(`Api aktif diport ${port}`))
 var now = moment().format("dddd, MMMM Do YYYY, h:mm:ss a")
+var test = moment().add(30, 'day').format("YYYY-MM-DD h:mm:ss")
+console.log(test)
 console.log(now) 
-
+ 
