@@ -244,7 +244,7 @@ module.exports={
 
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
 
-            res.send({ username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
+            res.send({userId: results[0].id, username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
         })
     }
 }

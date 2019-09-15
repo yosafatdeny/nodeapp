@@ -4,6 +4,7 @@ const kelasController = require('./kelasController')
 const cartController = require('./cartController')
 const paketController = require('./paketController')
 const transactionController = require('./transactionController')
+const konfirmasiController = require('./konfirmasiController')
 
 module.exports = {
     userController,
@@ -11,5 +12,6 @@ module.exports = {
     kelasController,
     cartController,
     paketController,
-    transactionController
+    transactionController,
+    konfirmasiController
 }

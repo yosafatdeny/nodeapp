@@ -22,8 +22,13 @@ module.exports={
         })
     },
     addTransaction:(req, res)=>{
-        var {userId, paketId, durasi, harga, date, email} = req.body
-        console.log(req.body)
+        console.log('masuk sinih')
+        console.log('body==>',req.body.data)
+        var data = req.body.data
+        var  data1 = JSON.parse(req.body.data)
+        console.log(data1)
+        var {userId, paketId, durasi, harga, email} = data
+        var date = moment().format("YYYY-MM-DD, hh:mm:ss ")
         var randDate = moment().format("YYMMDD")
         var randInt = Math.floor(Math.random()*(999-100+1)+100)
         var transData = {
@@ -34,7 +39,7 @@ module.exports={
             date: date,
             status:'Unverified'
         }
-        console.log(transData)
+        console.log('transData===>',transData)
 
         var sql = `INSERT INTO transaction SET ?`
         conn.query(sql, transData, (err, result)=>{
@@ -53,8 +58,17 @@ module.exports={
                         console.log(err2)
                         return res.status(500).send({status: 'error', err: err2})
                     }
-                    console.log('Success')
-                    return res.status(200).send(result)
+
+                    sql=`SELECT * FROM transaction where idtransaction = ${result.insertId}`
+                    conn.query(sql, (err, resData)=>{
+                        if(err){
+                            console.log(err2)
+                            return res.status(500).send({status: 'error', err: err2})
+                        }
+
+                        console.log('result===>',resData)
+                        return res.status(200).send(resData)
+                    })
                 })
         })
 

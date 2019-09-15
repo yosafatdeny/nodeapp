@@ -24,7 +24,15 @@ app.get('/',(req,res)=>{
     `)
 })
 
-const { usersRouter, rolesRouter, kelasRouter, cartRouter, paketRouter, transactionRouter} = require('./routers')
+const { 
+    usersRouter, 
+    rolesRouter, 
+    kelasRouter, 
+    cartRouter, 
+    paketRouter, 
+    transactionRouter,
+    konfirmasiRouter
+} = require('./routers')
 
 app.use('/user', usersRouter)
 app.use('/role', rolesRouter)
@@ -32,6 +40,7 @@ app.use('/kelas', kelasRouter)
 app.use('/cart', cartRouter)
 app.use('/paket', paketRouter)
 app.use('/transaction', transactionRouter)
+app.use('/konfirmasi', konfirmasiRouter)
 
 
 

@@ -4,6 +4,7 @@ const kelasRouter = require('./kelasRouter')
 const cartRouter = require('./cartRouter')
 const paketRouter = require('./paketRouter')
 const transactionRouter = require('./transactionRouter')
+const konfirmasiRouter = require('./konfirmasiRouter')
 
 module.exports={
     usersRouter,
@@ -11,5 +12,6 @@ module.exports={
     kelasRouter,
     cartRouter, 
     paketRouter,
-    transactionRouter
+    transactionRouter,
+    konfirmasiRouter
 }
