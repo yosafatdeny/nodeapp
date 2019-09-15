@@ -2,6 +2,7 @@ const jwt = require ('jsonwebtoken');
 
 module.exports = {
     auth : (req, res, next) => {
+        // console.log('disini',JSON.parse(req.body))
         // console.log('req =====> ', req)
         // console.log('req-method ====> ', req.method)
         // console.log('req-token =====> ', req.token)

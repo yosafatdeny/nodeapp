@@ -4,8 +4,8 @@ const moment    = require('moment')
 module.exports={
     getTransaction: (req, res)=>{
         var qry=''
-        if(req.query.userId){
-            qry = `where userId = ${req.query.userId}`
+        if(req.query.idtransaction){
+            qry = `where idtransaction = ${req.query.idtransaction}`
         }
         var sql = `select t.*, p.durasi, p.harga, u.username as NamaUser
                         from transaction t
@@ -23,11 +23,12 @@ module.exports={
     },
     addTransaction:(req, res)=>{
         console.log('masuk sinih')
-        console.log('body==>',req.body.data)
-        var data = req.body.data
-        var  data1 = JSON.parse(req.body.data)
-        console.log(data1)
-        var {userId, paketId, durasi, harga, email} = data
+        console.log('body=======>',req.body)
+        var saja={nama:'aaanama', juga:'apa'}
+        // var c= JSON.stringify(saja)
+        // var  data1 = JSON.parse(req.body.data)
+        // console.log(data1)
+        var {userId, paketId, durasi, harga, email} = req.body
         var date = moment().format("YYYY-MM-DD, hh:mm:ss ")
         var randDate = moment().format("YYMMDD")
         var randInt = Math.floor(Math.random()*(999-100+1)+100)
