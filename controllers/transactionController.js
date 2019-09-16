@@ -22,12 +22,7 @@ module.exports={
         })
     },
     addTransaction:(req, res)=>{
-        console.log('masuk sinih')
-        console.log('body=======>',req.body)
-        var saja={nama:'aaanama', juga:'apa'}
-        // var c= JSON.stringify(saja)
-        // var  data1 = JSON.parse(req.body.data)
-        // console.log(data1)
+        
         var {userId, paketId, durasi, harga, email} = req.body
         var date = moment().format("YYYY-MM-DD, h:mm:ss ")
         var randDate = moment().format("YYMMDD")

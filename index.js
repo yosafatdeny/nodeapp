@@ -31,7 +31,10 @@ const {
     cartRouter, 
     paketRouter, 
     transactionRouter,
-    konfirmasiRouter
+    konfirmasiRouter,
+    langgananRouter,
+    modulRouter,
+    belajarRouter
 } = require('./routers')
 
 app.use('/user', usersRouter)
@@ -41,6 +44,9 @@ app.use('/cart', cartRouter)
 app.use('/paket', paketRouter)
 app.use('/transaction', transactionRouter)
 app.use('/konfirmasi', konfirmasiRouter)
+app.use('/langganan', langgananRouter)
+app.use('/modul', modulRouter)
+app.use('/belajar', belajarRouter)
 
 
 
