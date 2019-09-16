@@ -29,7 +29,7 @@ module.exports={
         // var  data1 = JSON.parse(req.body.data)
         // console.log(data1)
         var {userId, paketId, durasi, harga, email} = req.body
-        var date = moment().format("YYYY-MM-DD, hh:mm:ss ")
+        var date = moment().format("YYYY-MM-DD, h:mm:ss ")
         var randDate = moment().format("YYMMDD")
         var randInt = Math.floor(Math.random()*(999-100+1)+100)
         var transData = {

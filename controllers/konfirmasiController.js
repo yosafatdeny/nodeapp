@@ -28,9 +28,10 @@ module.exports={
                 const { image } = req.files;
                 const imagePath = image ? path + '/' + image[0].filename : null
                 console.log(imagePath)
-                imagePath='/konfirmasi/image/image.jpg'
+                // const imagePath='/konfirmasi/image/image.jpg'
                 const data = JSON.parse(req.body.data)
                 data.image = imagePath
+                data.status = 'unverified'
                  
                 var sql = `INSERT INTO konfirmasi SET ?`
                 conn.query(sql, data, (err, result)=>{
@@ -105,7 +106,16 @@ module.exports={
                                         
                                         console.log(`data langganan berhasil di proses`)
                                         console.log(result3)
-                                        return res.status(200).send(result3)
+
+                                        sql=`SELECT * FROM konfirmasi`
+                                        conn.query(sql, (err, konfirmasiData)=>{
+                                            if(err3){
+                                                return res.status(500).send({status: 'error', err: err3})
+                                            }
+
+                                            return res.status(200).send(konfirmasiData)
+                                        })
+                                        // return res.status(200).send(result3)
                                     })
     
                                     // console.log(`transaction id ${idtransaction} verified`)
