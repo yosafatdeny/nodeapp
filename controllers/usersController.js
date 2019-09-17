@@ -227,8 +227,33 @@ module.exports={
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
             // console.log(token)
             // console.log('ini ========> ', results[0].active)
-            return res.status(200).send({ username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
-            // return res.status(200).send({ username:results[0].username, email: results[0].email, status: results[0].status})
+            sql = `select * from langganan where userId = ${results[0].id} && status='active'`
+            conn.query(sql, (err, resLangganan)=>{
+                if(err) return res.status(500).send({ status: 'error', err })
+
+                sql = `select * from kelasku where userId = ${results[0].id}`
+                conn.query(sql, (err, resKelasku)=>{
+                    if(err) return res.status(500).send({ status: 'error', err })
+
+                    sql = `select * from belajar where userId = ${results[0].id}`
+                    conn.query(sql, (err, resBelajar)=>{
+                        if(err) return res.status(500).send({ status: 'error', err })
+                        
+                        return res.status(200).send({
+                            userId      : results[0].id, 
+                            username    : results[0].username, 
+                            email       : results[0].email, 
+                            status      : results[0].status, 
+                            token, 
+                            image       : results[0].image, 
+                            roleId      : results[0].roleId, 
+                            langganan   : resLangganan,
+                            kelasku     : resKelasku,
+                            belajar     : resBelajar
+                        })
+                    })
+                })
+            })
         })
     },
     keepLogin: (req,res) => { 
@@ -243,8 +268,33 @@ module.exports={
             }
 
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
+            sql = `select * from langganan where userId = ${req.user.userId} && status='active'`
+            conn.query(sql, (err, resLangganan)=>{
+                if(err) return res.status(500).send({ status: 'error', err })
 
-            res.send({userId: results[0].id, username: results[0].username, email: results[0].email, status: results[0].status, token, image: results[0].image})
+                sql = `select * from kelasku where userId = ${req.user.userId}`
+                conn.query(sql, (err, resKelasku)=>{
+                    if(err) return res.status(500).send({ status: 'error', err })
+
+                    sql = `select * from belajar where userId = ${req.user.userId}`
+                    conn.query(sql, (err, resBelajar)=>{
+                        if(err) return res.status(500).send({ status: 'error', err })
+                        
+                        return res.status(200).send({
+                            userId      : results[0].id, 
+                            username    : results[0].username, 
+                            email       : results[0].email, 
+                            status      : results[0].status, 
+                            token, 
+                            image       : results[0].image, 
+                            roleId      : results[0].roleId, 
+                            langganan   : resLangganan,
+                            kelasku     : resKelasku,
+                            belajar     : resBelajar
+                        })
+                    })
+                })
+            })
         })
     }
 }

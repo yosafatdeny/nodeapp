@@ -3,7 +3,7 @@ const conn = require('../database')
 module.exports={
     getLangganan : (req, res)=>{
         let qry=''
-        console.log('langganan userid', req.query.userId)
+        // console.log('langganan userid', req.query.userId)
         if(req.query.userId){
             qry = `where userId = ${req.query.userId} && status = 'active';`
         }

@@ -8,6 +8,7 @@ const konfirmasiController  = require('./konfirmasiController')
 const langgananController   = require('./langgananController')
 const modulController      = require('./modulController')
 const belajarController     = require('./belajarController')
+const kelaskuController     = require('./kelaskuController')
 
 module.exports = {
     userController,
@@ -19,5 +20,6 @@ module.exports = {
     konfirmasiController,
     langgananController,
     modulController,
-    belajarController
+    belajarController,
+    kelaskuController
 }
