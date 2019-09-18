@@ -7,16 +7,10 @@ module.exports={
         var iduser = req.query.iduser
         var qry = ''
         if(idkelas && iduser){
-            qry = `WHERE k.idKelas = ${idkelas} && b.iduser = ${iduser}`
+            qry = `WHERE userId = ${iduser}`
         }
 
-        let sql = `SELECT b.*, k.idKelas
-                        FROM belajar b
-                        JOIN  modul m
-                        ON b.idmodul = m.idmodul
-                        JOIN kelas k
-                        ON k.idKelas = m.idkelas
-                        ${qry}`
+        let sql = `SELECT * FROM belajar ${qry}`
         conn.query(sql, (err, result) =>{
             if(err) return res.status(500).send({message: 'error', error: err})
 
@@ -30,7 +24,13 @@ module.exports={
         conn.query(sql, data, (err, result)=>{
             if(err) return res.status(500).send({message: 'error', error: err})
 
-            return res.status(200).send(result)
+            sql =  `select * from belajar`
+            conn.query(sql, (err, result) =>{
+                if(err) return res.status(500).send({message: 'error', error: err})
+                
+                console.log('berhasil add', result)
+                return res.status(200).send(result)
+            })
         })
     }
 }

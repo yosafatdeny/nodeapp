@@ -40,7 +40,7 @@ module.exports={
                     to      : email,
                     subject : 'Verifikasi email user baru qlas.com',
                     html    :  `Mohon untuk klik link dibawah ini untuk verifikasi email anda :
-                    <a href="${linkVerifikasi}">Join Instagrin</a>`
+                    <a href="${linkVerifikasi}">Konfirmasi email</a>`
                 }
 
                 transporter.sendMail(mailOptions, (err2, res2)=>{
@@ -89,12 +89,12 @@ module.exports={
 
             var linkVerifikasi = `http://localhost:3000/verified?username=${results[0].username}&password=${results[0].password}`;
             var mailOptions = {
-                from: 'Penguasa Instagrin <baronhartono@gmail.com>',
-                to: results[0].email,
-                subject: 'Verifikasi Email untuk Instagrin',
-                html: `Tolong click link ini untuk verifikasi : 
-                        <a href="${linkVerifikasi}">Join Instagrin!</a>`
-            }
+                from    : 'Qiandra dari Qlas.com <lab.hisbu@gmail.com>',
+                to      : email,
+                subject : 'Verifikasi email user baru qlas.com',
+                html    :  `Mohon untuk klik link dibawah ini untuk verifikasi email anda :
+                <a href="${linkVerifikasi}">Konfirmasi email</a>`
+        }
 
             transporter.sendMail(mailOptions, (err2,res2) => {
                 if(err2) { 
@@ -108,7 +108,10 @@ module.exports={
         })
     },
     getUsers: (req,res) =>{
-        var sql = `select * from users`
+        var sql = `select u.*, r.roleName as role 
+                        from users u
+                        join roles r
+                        on u.roleId = r.id`
         conn.query(sql, (err, result)=>{
             if(err) return res.status(500).send({message: 'Error', error: err})
             // console.log(result)
@@ -227,29 +230,58 @@ module.exports={
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
             // console.log(token)
             // console.log('ini ========> ', results[0].active)
-            sql = `select * from langganan where userId = ${results[0].id} && status='active'`
+            sql = `select l.*, p.durasi  
+                            from langganan l 
+                            join paket p 
+                            on l.paketId = p.idpaket 
+                            where userId = ${results[0].id}
+                            && status='active'`
+            // sql = `select * from langganan where userId = ${results[0].id} && status='active'`
             conn.query(sql, (err, resLangganan)=>{
                 if(err) return res.status(500).send({ status: 'error', err })
-
-                sql = `select * from kelasku where userId = ${results[0].id}`
+                if(resLangganan.length === 0){
+                    resLangganan = null
+                }
+                sql = `select kk.*, count(m.idmodul) as jumlahModul  
+                            from kelasku kk
+                            join modul m 
+                            on  kk.kelasId = m.idkelas 
+                            where userId = ${results[0].id}
+                            group by kk.kelasId`
                 conn.query(sql, (err, resKelasku)=>{
                     if(err) return res.status(500).send({ status: 'error', err })
 
-                    sql = `select * from belajar where userId = ${results[0].id}`
+                    sql = `select b.* , m.idkelas as kelasId
+                                from belajar b
+                                join modul m
+                                on b.modulId = m.idmodul
+                                where userId  = ${results[0].id}`
+
                     conn.query(sql, (err, resBelajar)=>{
                         if(err) return res.status(500).send({ status: 'error', err })
                         
-                        return res.status(200).send({
-                            userId      : results[0].id, 
-                            username    : results[0].username, 
-                            email       : results[0].email, 
-                            status      : results[0].status, 
-                            token, 
-                            image       : results[0].image, 
-                            roleId      : results[0].roleId, 
-                            langganan   : resLangganan,
-                            kelasku     : resKelasku,
-                            belajar     : resBelajar
+                        sql = `select b.userId, count(b.modulId) as modulSelesai, m.idkelas as kelasId
+                                    from belajar b
+                                    join modul m
+                                    on b.modulId = m.idmodul
+                                    where userId = ${results[0].id}
+                                    group by kelasId;`
+                        conn.query(sql, (err, resModulSelesai) => {
+                            if(err) return res.status(500).send({ status: 'error', err })
+                            
+                            return res.status(200).send({
+                                userId      : results[0].id, 
+                                username    : results[0].username, 
+                                email       : results[0].email, 
+                                status      : results[0].status, 
+                                token, 
+                                image       : results[0].image, 
+                                roleId      : results[0].roleId, 
+                                langganan   : resLangganan,
+                                kelasku     : resKelasku,
+                                belajar     : resBelajar,
+                                modulSelesai: resModulSelesai
+                            })
                         })
                     })
                 })
@@ -268,29 +300,55 @@ module.exports={
             }
 
             const token = createJWTToken({ userId: results[0].id, username: results[0].username })
-            sql = `select * from langganan where userId = ${req.user.userId} && status='active'`
+            sql = `select l.*, p.durasi  
+                        from langganan l 
+                        join paket p 
+                        on l.paketId = p.idpaket 
+                        where userId = ${req.user.userId} && status='active'`
             conn.query(sql, (err, resLangganan)=>{
                 if(err) return res.status(500).send({ status: 'error', err })
-
-                sql = `select * from kelasku where userId = ${req.user.userId}`
+                if(resLangganan.length === 0){
+                    resLangganan = null
+                }
+                sql = `select kk.*, count(m.idmodul) as jumlahModul  
+                            from kelasku kk
+                            join modul m 
+                            on  kk.kelasId = m.idkelas 
+                            where userId = ${req.user.userId}
+                            group by kk.kelasId`
                 conn.query(sql, (err, resKelasku)=>{
                     if(err) return res.status(500).send({ status: 'error', err })
 
-                    sql = `select * from belajar where userId = ${req.user.userId}`
+                    sql = `select b.* , m.idkelas as kelasId
+                                from belajar b
+                                join modul m
+                                on b.modulId = m.idmodul
+                                where userId = ${results[0].id}`
                     conn.query(sql, (err, resBelajar)=>{
                         if(err) return res.status(500).send({ status: 'error', err })
                         
-                        return res.status(200).send({
-                            userId      : results[0].id, 
-                            username    : results[0].username, 
-                            email       : results[0].email, 
-                            status      : results[0].status, 
-                            token, 
-                            image       : results[0].image, 
-                            roleId      : results[0].roleId, 
-                            langganan   : resLangganan,
-                            kelasku     : resKelasku,
-                            belajar     : resBelajar
+                        sql = `select b.userId, count(b.modulId) as modulSelesai, m.idkelas as kelasId
+                                    from belajar b
+                                    join modul m
+                                    on b.modulId = m.idmodul
+                                    where userId = ${results[0].id}
+                                    group by kelasId;`
+                        conn.query(sql, (err, resModulSelesai) => {
+                            if(err) return res.status(500).send({ status: 'error', err })
+                            
+                            return res.status(200).send({
+                                userId      : results[0].id, 
+                                username    : results[0].username, 
+                                email       : results[0].email, 
+                                status      : results[0].status, 
+                                token, 
+                                image       : results[0].image, 
+                                roleId      : results[0].roleId, 
+                                langganan   : resLangganan,
+                                kelasku     : resKelasku,
+                                belajar     : resBelajar,
+                                modulSelesai: resModulSelesai
+                            })
                         })
                     })
                 })

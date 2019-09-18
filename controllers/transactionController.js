@@ -45,8 +45,8 @@ module.exports={
                 var mailOptions = {
                     from    : 'Qiandra dari Qlas.com <lab.hisbu@gmail.com>',
                     to      : email,
-                    subject : 'Verifikasi email user baru qlas.com',
-                    html    :  `Mohon untuk klik link dibawah ini untuk verifikasi email anda :`
+                    subject : 'Pesanan Paket Berlangganan Qelas',
+                    html    :  `pesanan anda sudah kami terima. segera lakukan pembayaran`
                     // <a href="${linkVerifikasi}">Join Instagrin</a>`
                 }
                 transporter.sendMail(mailOptions, (err2, res2)=>{
