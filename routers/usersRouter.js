@@ -12,6 +12,7 @@ router.put('/verifikasiemail', userController.emailVerifikasi)
 router.post('/resendemailver', userController.resendEmailVer)
 router.get('/getCurrentUser/:username',auth, userController.getCurrentUser)
 router.put('/editUser/:username', auth, userController.editUser)
+router.put('/editRole', auth, userController.editUserRole)
 router.post('/changePassword', userController.changePassword)
  
 module.exports = router

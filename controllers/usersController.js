@@ -108,16 +108,30 @@ module.exports={
         })
     },
     getUsers: (req,res) =>{
-        var sql = `select u.*, r.roleName as role 
+        var sql = `select u.username, p.durasi, l.akhirlangganan 
                         from users u
-                        join roles r
-                        on u.roleId = r.id`
+                        left join langganan l
+                        on u.id = l.userId
+                        left join paket p
+                        on p.idpaket = l.paketId
+                        where status = 'active' or status is null ;`
         conn.query(sql, (err, result)=>{
             if(err) return res.status(500).send({message: 'Error', error: err})
             // console.log(result)
             return res.status(200).send(result)
         })
     },
+    // getUsers: (req,res) =>{
+    //     var sql = `select u.*, r.roleName as role 
+    //                     from users u
+    //                     join roles r
+    //                     on u.roleId = r.id`
+    //     conn.query(sql, (err, result)=>{
+    //         if(err) return res.status(500).send({message: 'Error', error: err})
+    //         // console.log(result)
+    //         return res.status(200).send(result)
+    //     })
+    // },
     getCurrentUser:(req, res) => {
         const {username} = req.params
         // console.log('get params ===>', username)
@@ -153,6 +167,35 @@ module.exports={
 
                 return res.status(200).send(result1)
             })
+        })
+    },
+    editUserRole:(req, res)=>{
+        var iduser = req.query.id
+        console.log('masuk role ====', req.query.id)
+        var sql = `select * from users where id = ${iduser}`
+        conn.query(sql, (err, result)=>{
+            if(err) return res.status(500).send({message: 'error', error: err})
+            if(result.length > 0){
+              
+                var data = {
+                    roleId : req.body.roleId
+                }
+                console.log(data)
+                sql=`update users set ? where id = ${iduser} `
+                conn.query(sql, data, (err, result)=>{
+                    if(err) return res.status(500).send({message: 'error', error: err})
+
+                    var sql = `select u.*, r.roleName as role 
+                                    from users u
+                                    join roles r
+                                    on u.roleId = r.id`
+                    conn.query(sql, (err, result1)=>{
+                        if(err) return res.status(500).send({message: 'error', error: err})
+
+                        return res.status(200).send(result1)
+                    })
+                })
+            }
         })
     },
     editUser:(req, res) => {
