@@ -9,6 +9,7 @@ const langgananRouter   = require('./langgananRouter')
 const modulRouter       = require('./modulRouter')
 const belajarRouter     = require('./belajarRouter')
 const kelaskuRouter     = require('./kelaskuRouter')
+const midtrans          = require('./midtrans')
 
 module.exports={
     usersRouter,
@@ -21,5 +22,6 @@ module.exports={
     langgananRouter,
     modulRouter,
     belajarRouter,
-    kelaskuRouter
+    kelaskuRouter,
+    midtrans
 }

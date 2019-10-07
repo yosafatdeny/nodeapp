@@ -4,7 +4,7 @@ const bodyparser= require('body-parser')
 const moment    = require('moment')
 const Crypto    = require('crypto')
 const bearerToken  = require('express-bearer-token')
-
+const midtrransClient = require('midtrans-client')
 //initial port
 const port = 2017
 //execute express
@@ -35,7 +35,8 @@ const {
     langgananRouter,
     modulRouter,
     belajarRouter,
-    kelaskuRouter
+    kelaskuRouter,
+    midtrans
 } = require('./routers')
 
 app.use('/user', usersRouter)
@@ -49,6 +50,7 @@ app.use('/langganan', langgananRouter)
 app.use('/modul', modulRouter)
 app.use('/belajar', belajarRouter)
 app.use('/kelasku', kelaskuRouter)
+app.use('/midtrans', midtrans)
 
 
 
