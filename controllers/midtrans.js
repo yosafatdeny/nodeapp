@@ -43,11 +43,11 @@ module.exports={
         })        
     },
     getStatus:(req,res)=>{
-        // const {order_id, transaction_status} = req.body
+        
         const {order_id} = req.body
+        console.log('========masuk getStatus =============')
         console.log(order_id)
 
-        let mockNotificationJson = ''
         snap.transaction.status(order_id)
         .then((Response)=>{
             console.log('=======masuk status=========')
