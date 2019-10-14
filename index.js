@@ -1,22 +1,50 @@
 const express   = require('express')
+const app = express()
 const cors      = require('cors')
 const bodyparser= require('body-parser')
 const moment    = require('moment')
 const Crypto    = require('crypto')
 const bearerToken  = require('express-bearer-token')
 const midtrransClient = require('midtrans-client')
+
+
+const http = require('http').createServer(app)
+
+const io = require('socket.io')(http, {
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+            "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
+    }
+})
+console.log(io)
+
+app.use(cors())
+app.use(bearerToken())
 //initial port
 const port = 2017
 //execute express
-const app = express()
+
+
+
 //allow react access
-app.use(cors())
-app.use(bearerToken())
 //get json from req.body
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))
 //allow public dir for public access
 app.use(express.static('public'))
+
+
+app.io = io
+
+
+
+
+
 
 app.get('/',(req,res)=>{
     res.status(200).send(`
@@ -52,11 +80,21 @@ app.use('/belajar', belajarRouter)
 app.use('/kelasku', kelaskuRouter)
 app.use('/midtrans', midtrans)
 
+console.log('masuk io')
+io.on('connection', (socket) => {
+        console.log('User connected')
+        io.emit('user connected', {})
+        socket.on('disconnect', () => {
+                console.log('user disconnected')
+                io.emit('user connected', {})
+        })
+})
 
-
-app.listen(port, ()=> console.log(`Api aktif diport ${port}`))
 var now = moment().format("dddd, MMMM Do YYYY, h:mm:ss a")
 var test = moment().add(30, 'day').format("YYYY-MM-DD h:mm:ss")
 console.log(test)
 console.log(now) 
+
+http.listen(port, ()=> console.log(`Api aktif diport ${port}`))
+
  

@@ -13,7 +13,6 @@ module.exports={
         let sql = `SELECT * FROM belajar ${qry}`
         conn.query(sql, (err, result) =>{
             if(err) return res.status(500).send({message: 'error', error: err})
-
             return res.status(200).send(result)
         })
 
