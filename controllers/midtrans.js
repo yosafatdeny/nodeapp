@@ -52,7 +52,7 @@ module.exports={
         .then((Response)=>{
             console.log('=======masuk status=========')
             console.log(Response)
-            req.app.io.emit('status_transaction', Response)
+            req.app.io.emit('status_transaction', Response.transaction_status)
             console.log(Response)
             mockNotificationJson = Response     
             snap.transaction.notification(Response)
