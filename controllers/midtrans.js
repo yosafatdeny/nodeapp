@@ -53,8 +53,8 @@ module.exports={
             console.log('=======masuk status=========')
             console.log(Response)
             let status = {
-                order_id = Response.order_id,
-                transaction_status = Response.transaction_status
+                order_id : Response.order_id,
+                transaction_status : Response.transaction_status
             }
             req.app.io.emit('status_transaction', status)
             console.log(Response)
