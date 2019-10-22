@@ -5,7 +5,7 @@ const bodyparser= require('body-parser')
 const moment    = require('moment')
 const Crypto    = require('crypto')
 const bearerToken  = require('express-bearer-token')
-const midtrransClient = require('midtrans-client')
+// const midtrransClient = require('midtrans-client')
 
 
 const http = require('http').createServer(app)

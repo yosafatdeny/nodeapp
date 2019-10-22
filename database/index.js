@@ -6,8 +6,6 @@ const conn = mysql.createConnection({
     password: 'P@ssw0rd',
     database: 'dbqelas',
     port    : 3306
-
-    
 })
 
 // const conn = mysql.createConnection({
