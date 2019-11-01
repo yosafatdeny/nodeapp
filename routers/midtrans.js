@@ -7,5 +7,6 @@ const router = express.Router()
 router.post('/midtrans', midtrans.getMidtrans)
 router.post('/getStatus', midtrans.getStatus)
 router.post('/gopay', midtrans.coreMidtrans)
+router.post('/payout', midtrans.payout)
 
 module.exports = router
