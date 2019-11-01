@@ -116,38 +116,63 @@ module.exports={
 
 
 payout:(req,res)=>{
-    console.log('--------------------------> masuk payout')
-    let options={
-        auth:{
-            username: "Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6"
-        },
-        header:{
-            // "Authorization":"Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6",
-            "Content-Type":"application/json",
-            "Accept":"application/json",
-            // "Access-Control-Allow-Origin":"*"
-        }
-    }
-    let body={
-        "payouts": [
-            {
-              "beneficiary_name": "Jon Snow",
-              "beneficiary_account": "1172993826",
-              "beneficiary_bank": "bni",
-              "beneficiary_email": "beneficiary@example.com",
-              "amount": '10000',
-              "notes": "Payout April 17"
-            }
-          ]
-    }
-    Axios.post('https://app.sandbox.midtrans.com/iris/api/v1/payouts', body, options)
-    .then((ress)=>{
-        console.log(ress.data)
-        return res.status(200).send(ress.data)
-    }).catch((err)=>{
-        console.log(err)
-        return res.status(400).send(err)
-    })
+        // console.log('--------------------------> masuk payout')
+        // let options={
+        //     auth:{
+        //         username: "Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6"
+        //     },
+        //     header:{
+        //         // "Authorization":"Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6",
+        //         "Content-Type":"application/json",
+        //         "Accept":"application/json",
+        //         // "Access-Control-Allow-Origin":"*"
+        //     }
+        // }
+        // let body={
+        //     "payouts": [
+        //         {
+        //         "beneficiary_name": "Jon Snow",
+        //         "beneficiary_account": "1172993826",
+        //         "beneficiary_bank": "bni",
+        //         "beneficiary_email": "beneficiary@example.com",
+        //         "amount": '10000',
+        //         "notes": "Payout April 17"
+        //         }
+        //     ]
+        // }
+        // Axios.post('https://app.sandbox.midtrans.com/iris/api/v1/payouts', body, options)
+        // .then((ress)=>{
+        //     console.log(ress.data)
+        //     return res.status(200).send(ress.data)
+        // }).catch((err)=>{
+        //     console.log(err)
+        //     return res.status(400).send(err)
+        // })
 
-}
+        axios({
+            headers: {
+              'Content-Type': 'application/json',
+              "Accept":"application/json",
+            },
+            method: 'post',
+            url: 'https://app.sandbox.midtrans.com/iris/api/v1/payouts',
+            auth: {
+              username: 'Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6',
+              password: ''
+            },
+            data: {
+                "payouts": [
+                            {
+                            "beneficiary_name": "Jon Snow",
+                            "beneficiary_account": "1172993826",
+                            "beneficiary_bank": "bni",
+                            "beneficiary_email": "beneficiary@example.com",
+                            "amount": '10000',
+                            "notes": "Payout April 17"
+                            }
+                        ]
+                }
+            })
+
+    }
 }
