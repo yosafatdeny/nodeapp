@@ -157,7 +157,7 @@ payout:(req,res)=>{
             method: 'post',
             url: 'https://app.sandbox.midtrans.com/iris/api/v1/payouts',
             auth: {
-              username: 'Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6',
+              username: 'Basic IRIS-83f135ed-3513-47bf-81bb-a071822ee68f',
               password: ''
             },
             data: {
