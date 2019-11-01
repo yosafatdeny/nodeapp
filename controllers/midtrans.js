@@ -173,6 +173,13 @@ payout:(req,res)=>{
                         ]
                 }
             })
+            .then((ress)=>{
+                    console.log(ress.data)
+                    return res.status(200).send(ress.data)
+                }).catch((err)=>{
+                    console.log(err)
+                    return res.status(400).send(err)
+                })
 
     }
 }
