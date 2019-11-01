@@ -118,8 +118,11 @@ module.exports={
 payout:(req,res)=>{
     console.log('--------------------------> masuk payout')
     let options={
+        auth:{
+            username: "Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6"
+        },
         header:{
-            "Authorization":"Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6",
+            // "Authorization":"Basic SVJJUy04M2YxMzVlZC0zNTEzLTQ3YmYtODFiYi1hMDcxODIyZWU2OGY6",
             "Content-Type":"application/json",
             "Accept":"application/json",
             // "Access-Control-Allow-Origin":"*"
