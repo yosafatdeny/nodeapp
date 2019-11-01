@@ -149,7 +149,7 @@ payout:(req,res)=>{
         //     return res.status(400).send(err)
         // })
 
-        axios({
+        Axios({
             headers: {
               'Content-Type': 'application/json',
               "Accept":"application/json",
