@@ -49,7 +49,7 @@ module.exports={
         const {order_id} = req.body
         console.log('========masuk getStatus =============')
         console.log(order_id)
-
+        console.log(req)
         snap.transaction.status(order_id)
         .then((Response)=>{
             console.log('=======masuk status=========')
