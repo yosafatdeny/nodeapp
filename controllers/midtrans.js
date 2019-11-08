@@ -49,47 +49,47 @@ module.exports={
         const {order_id} = req.body
         console.log('========masuk getStatus =============')
         console.log(order_id)
-        console.log(req)
-        snap.transaction.status(order_id)
-        .then((Response)=>{
-            console.log('=======masuk status=========')
-            console.log(Response)
-            let status = {
-                order_id : Response.order_id,
-                transaction_status : Response.transaction_status
-            }
-            req.app.io.emit('status_transaction', status)
-            console.log(Response)
-            mockNotificationJson = Response     
-            snap.transaction.notification(Response)
-                .then((statusResponse)=>{
-                    console.log('=======masuk notification=========')
-                    console.log(statusResponse)
+        console.log(req.body)
+        // snap.transaction.status(order_id)
+        // .then((Response)=>{
+        //     console.log('=======masuk status=========')
+        //     console.log(Response)
+        //     let status = {
+        //         order_id : Response.order_id,
+        //         transaction_status : Response.transaction_status
+        //     }
+        //     req.app.io.emit('status_transaction', status)
+        //     console.log(Response)
+        //     mockNotificationJson = Response     
+        //     snap.transaction.notification(Response)
+        //         .then((statusResponse)=>{
+        //             console.log('=======masuk notification=========')
+        //             console.log(statusResponse)
 
-                    let orderId = statusResponse.order_id
-                    let transactionStatus = statusResponse.transaction_status
-                    let fraudStatus = statusResponse.fraud_status
+        //             let orderId = statusResponse.order_id
+        //             let transactionStatus = statusResponse.transaction_status
+        //             let fraudStatus = statusResponse.fraud_status
 
-                    let msg = `Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`
+        //             let msg = `Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`
 
-                    if(transactionStatus == 'settlement'){
-                        console.log(transactionStatus)
-                        if(fraudStatus == 'challenge'){
-                            console.log(fraudStatus)
-                            return res.status(200).send(msg)
-                        }else if(fraudStatus == 'accept'){
-                            console.log(fraudStatus)
-                            return res.status(200).send(msg)
-                        }
-                    }else if(transactionStatus == 'cancel' || transactionStatus == 'failure'){
-                        console.log(transactionStatus)
-                        return res.status(200).send(msg)
-                    }else if(transactionStatus == 'pending'){
-                        console.log(transactionStatus)
-                        return res.status(200).send(msg)
-                    }
-                })      
-            })
+        //             if(transactionStatus == 'settlement'){
+        //                 console.log(transactionStatus)
+        //                 if(fraudStatus == 'challenge'){
+        //                     console.log(fraudStatus)
+        //                     return res.status(200).send(msg)
+        //                 }else if(fraudStatus == 'accept'){
+        //                     console.log(fraudStatus)
+        //                     return res.status(200).send(msg)
+        //                 }
+        //             }else if(transactionStatus == 'cancel' || transactionStatus == 'failure'){
+        //                 console.log(transactionStatus)
+        //                 return res.status(200).send(msg)
+        //             }else if(transactionStatus == 'pending'){
+        //                 console.log(transactionStatus)
+        //                 return res.status(200).send(msg)
+        //             }
+        //         })      
+        //     })
     },
 
     success: (req, res) => {
