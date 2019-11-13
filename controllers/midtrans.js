@@ -51,8 +51,8 @@ module.exports={
         console.log(order_id)
         console.log(req.body)
         
-        if(req.body.va_numbers.bank){
-            var bank = req.body.va_numbers.bank
+        if(req.body.va_numbers[0].bank){
+            var bank = req.body.va_numbers[0].bank
         }else if(req.body.biller_code){
             var bank = 'mandiri'
         }else if(req.body.permata_va_number){
