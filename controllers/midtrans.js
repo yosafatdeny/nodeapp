@@ -54,7 +54,7 @@ module.exports={
             order_id : req.body.order_id,
             transaction_status : req.body.transaction_status,
             payment_type : req.body.payment_type,
-            va_numbers : req.body.va_numbers ? req.body.va_numbers : null
+            va_numbers : req.body.va_numbers ? req.body.va_numbers ? req.body.bank : null
         }
         console.log('------------------------------------')
         console.log(status)
