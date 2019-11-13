@@ -50,8 +50,7 @@ module.exports={
         console.log('========masuk getStatus =============')
         console.log(order_id)
         console.log(req.body)
-        
-        if(req.body.va_numbers[0].bank){
+        if(req.body.va_numbers){
             var bank = req.body.va_numbers[0].bank
         }else if(req.body.biller_code){
             var bank = 'mandiri'
