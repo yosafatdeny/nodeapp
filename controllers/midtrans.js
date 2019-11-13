@@ -1,5 +1,6 @@
 const midtransClient = require('midtrans-client');
 const moment    = require('moment')
+const Axios = require('axios')
 
 const snap = new midtransClient.Snap({
     isProduction : false,
@@ -14,7 +15,6 @@ const core = new midtransClient.CoreApi({
 
 })
 
-const Axios = require('axios')
 
 
 module.exports={
@@ -50,6 +50,14 @@ module.exports={
         console.log('========masuk getStatus =============')
         console.log(order_id)
         console.log(req.body)
+        let status = {
+            order_id : req.body.order_id,
+            transaction_status : req.body.transaction_status,
+            payment_type : req.body.payment_type,
+            va_numbers : req.body.va_numbers ? req.body.va_numbers : null
+        }
+        console.log('------------------------------------')
+        console.log(status)
         // snap.transaction.status(order_id)
         // .then((Response)=>{
         //     console.log('=======masuk status=========')
