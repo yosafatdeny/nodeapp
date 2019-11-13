@@ -50,11 +50,23 @@ module.exports={
         console.log('========masuk getStatus =============')
         console.log(order_id)
         console.log(req.body)
+        
+        if(req.body.va_numbers.bank){
+            var bank = req.body.va_numbers.bank
+        }else if(req.body.biller_code){
+            var bank = 'mandiri'
+        }else if(req.body.permata_va_number){
+            var bank = 'permata'
+        }else if(req.body.bank){
+            var bank = req.body.bank
+        }else{
+            var bank = ''
+        }
         let status = {
             order_id : req.body.order_id,
             transaction_status : req.body.transaction_status,
             payment_type : req.body.payment_type,
-            va_numbers : req.body.va_numbers ? req.body.va_numbers : req.body.bank ? req.body.bank  : null
+            bank
         }
         console.log('------------------------------------')
         console.log(status)
