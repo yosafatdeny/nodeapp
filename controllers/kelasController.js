@@ -5,7 +5,9 @@ const fs = require('fs')
  
 module.exports ={
     getKelas: (req, res) => {
+        console.log('masuk kelas')
         var qry = ''
+        console.log(req.query)
         if(req.query.idKelas){
             qry = `where k.idKelas = ${req.query.idKelas}`
         }
@@ -17,8 +19,10 @@ module.exports ={
                         on k.idKelas = m.idkelas
                         ${qry}
                         group by m.idKelas;`
+        // console.log(sql)
                                
         conn.query(sql, (err, result) => {
+            console.log(err)
             if(err) return res.status(500).send({message: 'error', error: err})
 
             return res.status(200).send(result)
