@@ -49,7 +49,7 @@ pipeline{
         sh 'docker rmi yosafatdeny/nodeapp'
       }
     }
-    stage ('deploy myapp'){
+    stage ('deploy app'){
       steps{
         sh "chmod +x changeTag.sh"
         sh "./changeTag.sh ${DOCKER_TAG}"
