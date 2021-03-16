@@ -17,7 +17,7 @@ pipeline{
         echo "run test project"
       }
     }
-    stage ('build docker images'){
+    stage ('build docker image'){
       steps{
         script{
           app = docker.build("yosafatdeny/nodeapp")
