@@ -45,7 +45,7 @@ pipeline{
         }
       }
     }
-    stage ('cleanup image'){
+    stage ('cleanup images'){
       steps{
         sh 'docker rmi yosafatdeny/nodeapp'
       }
