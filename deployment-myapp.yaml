@@ -49,4 +49,4 @@ spec:
   ports:
     - port: 2017
       targetPort: 2017
-      nodePort: 32017
+      nodePort: 30021
