@@ -17,23 +17,24 @@ pipeline{
         echo "run test project"
       }
     }
-    // stage ('build docker images'){
-    //   steps{
-    //     script{
-    //       app = docker.build("yosafatdeny/nodeapp")
-    //     }
-    //   }
-    // }
-    // stage ('test image'){
-    //   steps{
-    //     sh'docker run -d --rm --name testcontainer -p 8081:80 yosafatdeny/nodeapp'
-    //   }
-    // }
-    // stage ('cleanup docker'){
-    //   steps{
-    //     sh 'docker stop testcontainer'
-    //   }
-    // }
+    stage ('build docker images'){
+      steps{
+        script{
+          app = docker.build("yosafatdeny/nodeapp")
+        }
+      }
+    }
+    stage ('test image'){
+      steps{
+        sh'docker run -d --rm --name testcontainer -p 8081:80 yosafatdeny/nodeapp'
+        input message: "Finished test image?(Click procced to continue"
+      }
+    }
+    stage ('cleanup docker'){
+      steps{
+        sh 'docker stop testcontainer'
+      }
+    }
     // stage ('push image'){
     //   steps{
     //     script{
