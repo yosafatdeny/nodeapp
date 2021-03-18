@@ -45,20 +45,20 @@ pipeline{
         }
       }
     }
-    // stage ('cleanup images'){
-    //   steps{
-    //     sh 'docker rmi yosafatdeny/nodeapp'
-    //   }
-    // }
-    // stage ('deploy app'){
-    //   steps{
-    //     sh "chmod +x changeTag.sh"
-    //     sh "./changeTag.sh ${DOCKER_TAG}"
-    //     withKubeConfig([credentialsId: 'kubeconfig-clusterjcde', serverUrl: 'https://34.101.231.26']){
-    //       sh 'kubectl apply -f deployment-config.k8s.yaml'
-    //     }
-    //   }
-    // }
+    stage ('cleanup images'){
+      steps{
+        sh 'docker rmi yosafatdeny/nodeapp'
+      }
+    }
+    stage ('deploy app'){
+      steps{
+        sh "chmod +x changeTag.sh"
+        sh "./changeTag.sh ${DOCKER_TAG}"
+        withKubeConfig([credentialsId: 'kubeconfig-clusterjcde', serverUrl: 'https://34.101.189.159']){
+          sh 'kubectl apply -f deployment-config.k8s.yaml'
+        }
+      }
+    }
 
 
   }
