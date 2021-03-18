@@ -1,9 +1,5 @@
 pipeline{
-  agent{
-    docker{
-      image 'node'
-    }
-  }
+  agent any
 
   // environment {
   //   DOCKER_TAG = getDockerTag()
