@@ -1,9 +1,9 @@
 pipeline{
   agent any
 
-  // environment {
-  //   DOCKER_TAG = getDockerTag()
-  // }
+  environment {
+    DOCKER_TAG = getDockerTag()
+  }
   stages{
     
     stage ('install dependencies'){
@@ -35,16 +35,16 @@ pipeline{
         sh 'docker stop testcontainer'
       }
     }
-    // stage ('push image'){
-    //   steps{
-    //     script{
-    //       docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-yosafatdeny'){
-    //         app.push("${DOCKER_TAG}")
-    //         app.push("latest")
-    //       }
-    //     }
-    //   }
-    // }
+    stage ('push image'){
+      steps{
+        script{
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-yosafatdeny'){
+            app.push("${DOCKER_TAG}")
+            app.push("latest")
+          }
+        }
+      }
+    }
     // stage ('cleanup images'){
     //   steps{
     //     sh 'docker rmi yosafatdeny/nodeapp'
@@ -64,7 +64,7 @@ pipeline{
   }
 }
 
-// def getDockerTag(){
-//   def tag = sh script: "git rev-parse HEAD", returnStdout: true
-//   return tag
-// }
+def getDockerTag(){
+  def tag = sh script: "git rev-parse HEAD", returnStdout: true
+  return tag
+}
